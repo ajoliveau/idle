@@ -1,7 +1,10 @@
 import { 
 	SWITCH_ROCKET,
+	NEXT_ROCKET,
+	PREVIOUS_ROCKET,
 	LAUNCH_ROCKET,
 } from '../actions/rockets'
+import { mod } from '../utils'
 
 const initialState = {
 	rockets: [
@@ -21,7 +24,28 @@ const initialState = {
 				},
 			],				
 			launches: 0,
-			image: '/assets/cardboard-launch.gif'
+			image: '/assets/cardboard-launch.gif',
+			imageDuration: 4750,
+			
+		},
+		{
+			id: 1,			
+			name: "Big cardboard rocket",
+			resources: [
+				{
+					name: "Cardboard",
+					shortName: "cardboard",
+					count: 10,
+				},
+				{
+					name: "Tape",
+					shortName: "tape",
+					count: 5,
+				},
+			],				
+			launches: 0,
+			image: '/assets/cardboard-launch.gif',
+			imageDuration: 4750,
 			
 		},
 	],
@@ -41,7 +65,8 @@ const initialState = {
 			},
 		],				
 		launches: 0,
-		image: '/assets/cardboard-launch.gif'
+		image: '/assets/cardboard-launch.gif',
+		imageDuration: 4750,
 		
 	},
 	totalLaunches: 0,
@@ -53,6 +78,20 @@ export default function rockets(state = initialState, action) {
 		return {        
 			...state,
 			current: action.payload.rocket,
+
+		}
+
+		case NEXT_ROCKET:
+		return {        
+			...state,
+			current: state.rockets[mod(state.current.id + 1, state.rockets.length)],
+
+		}
+
+		case PREVIOUS_ROCKET:
+		return {        
+			...state,
+			current: state.rockets[mod(state.current.id - 1, state.rockets.length)],
 
 		}
 

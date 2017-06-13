@@ -42,12 +42,14 @@ class ButtonResource extends Component {
 		
 		let canClick = true;
 		let missingResources = [];
+
 		for (const resource of resourcesNeeded) {
 			if (inventory[resource.shortName] < resource.count) {
 				canClick = false;
 				missingResources.push(resource);
 			}
 		}
+
 		if (canClick)
 			this.props.onClick(resourcesNeeded);
 		else
@@ -62,7 +64,7 @@ ButtonResource.propTypes = {
 	inventory: PropTypes.object.isRequired,
 	rocket: PropTypes.object.isRequired,
 	onClick: PropTypes.func.isRequired,
-	highlight: PropTypes.func,
+	highlight: PropTypes.func.isRequired,
 };
 
 export default ButtonResource;
