@@ -6,20 +6,36 @@ const initialState = {
 	rockets: [
 		{
 			name: "Cardboard rocket",
-			resources: {
-				cardboard: 50,
-				tape: 10,
-			},
+			resources: [
+				{
+					name: "Cardboard",
+					shortName: "cardboard",
+					count: 50,
+				},
+				{
+					name: "Tape",
+					shortName: "tape",
+					count: 10,
+				},
+			],				
 			launches: 0,			
 		},
 	],
 	current: {		
 		name: "Cardboard rocket",
-		resources: {
-			cardboard: 50,
-			tape: 10,
-		},
-		launches: 0,			
+		resources: [
+			{
+				name: "Cardboard",
+				shortName: "cardboard",
+				count: 50,
+			},
+			{
+				name: "Tape",
+				shortName: "tape",
+				count: 10,
+			},
+		],				
+		launches: 0,		
 	},
 	totalLaunches: 0,
 }

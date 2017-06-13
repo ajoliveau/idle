@@ -44,7 +44,12 @@ class MainSection extends Component {
 				</div>
 				<div className="middle" style={divStyle}>
 					<div className="text">Goal : {rockets.current.name}</div>
-					
+					{
+		                rockets.current.resources.map(function(resource)  {
+		                	console.log(resource);
+		                    return <div>{resource.name} : {inventory[resource.shortName]}/{resource.count}</div>
+		                })
+					}
 					<br/><br/>
 					<div className="text">Rockets launched : {idle.launches} </div>
 					<ButtonCountdown text="Launch !" onClick={this.launchClick} cooldown={50} />
