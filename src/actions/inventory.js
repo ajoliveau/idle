@@ -1,25 +1,27 @@
 // -- C O N S T A N T S
 
-export const ADD_CARDBOARD = 'ADD_CARDBOARD';
-export const ADD_TAPE = 'ADD_TAPE';
+export const ADD_RESOURCE = 'ADD_RESOURCE';
+export const REMOVE_RESOURCE = 'REMOVE_RESOURCE';
 
 // -- A C T I O N S
 
 
-export const addCardboard = ( count ) => {
+export const addResource = ( resource, count ) => {
     return {
-        type: ADD_CARDBOARD,
+        type: ADD_RESOURCE,
         payload: {
+            resource: resource,
         	count: count
         }
     };
 };
 
-export const addTape = ( count ) => {
+export const removeResource = ( resource, count ) => {
     return {
-        type: ADD_TAPE,
+        type: REMOVE_RESOURCE,
         payload: {
-        	count: count
+            resource: resource,
+            count: count
         }
     };
 };

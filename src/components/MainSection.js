@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types'
-import { addLaunch } from '../actions';
-import { addCardboard, addTape } from '../actions/inventory';
-import ButtonCountdown from '../components/ButtonCountdown'
+import { launchRocket } from '../actions/rockets';
+import { addResource, removeResource } from '../actions/inventory';
+import ButtonCountdown from '../components/ButtonCountdown';
+import ButtonResource from '../components/ButtonResource';
 
 class MainSection extends Component {
 
@@ -12,14 +13,16 @@ class MainSection extends Component {
 		this.launchClick = this.launchClick.bind(this);
 		this.tapeClick = this.tapeClick.bind(this);
 		this.cardboardClick = this.cardboardClick.bind(this);
-
-		console.log(this.props);
+		this.highlightResource = this.highlightResource.bind(this);
 	}
 
+	componentDidMount () {
+		this.refs.img.style.visibility = "hidden";
+	}
 
 	render() {
-		const { idle, inventory, rockets } = this.props       
-		
+		const { inventory, rockets } = this.props       
+		const currentRocket = rockets.current;
 		const divStyle = {
 			width: "20%",
 			height: "100px",
@@ -43,40 +46,48 @@ class MainSection extends Component {
 					<ButtonCountdown text="Go to the hardware store" onClick={this.tapeClick} cooldown={40}/>														
 				</div>
 				<div className="middle" style={divStyle}>
-					<div className="text">Goal : {rockets.current.name}</div>
+					<div className="text">Goal : {currentRocket.name}</div>
 					{
-		                rockets.current.resources.map(function(resource)  {
-		                	console.log(resource);
-		                    return <div>{resource.name} : {inventory[resource.shortName]}/{resource.count}</div>
+		                currentRocket.resources.map(function(resource)  {
+		                    return <div key={resource.name}>{resource.name} : {inventory[resource.shortName]}/{resource.count}</div>
 		                })
 					}
 					<br/><br/>
-					<div className="text">Rockets launched : {idle.launches} </div>
-					<ButtonCountdown text="Launch !" onClick={this.launchClick} cooldown={50} />
+					<div className="text">Rockets launched : {rockets.totalLaunches} </div>
+					<ButtonResource text="Launch !" highlight={this.highlightResource} inventory={inventory} rocket={currentRocket} onClick={this.launchClick} />
 				</div>
-				<div className="right" style={divRight}>
-					<div className="text">Placeholder </div>
+				<div className="right" style={divRight}>					
+					<img ref="img" src={currentRocket.image}></img>
 				</div>
 			</section>
 		)
 	}
 
 	tapeClick () {
-		this.props.dispatch(addTape(1));
-	}
-
-	launchClick () {
-		this.props.dispatch(addLaunch());
-	}
+		this.props.dispatch(addResource('tape', 1));
+	}	
 
 	cardboardClick () {
-		this.props.dispatch(addCardboard(1));
+		this.props.dispatch(addResource('cardboard', 1));
 	}
 
-	static propTypes = {
-		idle: PropTypes.object.isRequired
+	launchClick (resources) {
+		for (const resource of resources) {
+			this.props.dispatch(removeResource(resource.shortName, resource.count));
+		}
+
+		this.refs.img.style.visibility = "visible";
+
+		this.props.dispatch(launchRocket());
+	}	
+
+	highlightResource (resource) {		
 	}
 
+}
+
+MainSection.propTypes = {
+	
 }
 
 const mapStateToProps = ( state, ownProps ) => {

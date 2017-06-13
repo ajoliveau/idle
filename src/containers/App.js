@@ -9,19 +9,17 @@ import * as Actions from '../actions'
 const App = ({idle, inventory, rockets, actions}) => (
   <div>
     <Header/>
-    <MainSection idle={idle} inventory={inventory} rockets={rockets}/>
+    <MainSection inventory={inventory} rockets={rockets}/>
   </div>
 )
 
 App.propTypes = {
-  idle: PropTypes.object.isRequired,
   inventory: PropTypes.object.isRequired,
   rockets: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired
 }
 
-const mapStateToProps = state => ({
-  idle: state.idle,
+const mapStateToProps = state => ({  
   inventory: state.inventory,
   rockets: state.rockets
 })

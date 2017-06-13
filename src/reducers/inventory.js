@@ -1,6 +1,6 @@
 import { 
-	ADD_CARDBOARD,
-	ADD_TAPE
+	ADD_RESOURCE,
+	REMOVE_RESOURCE,	
 } from '../actions/inventory'
 
 const initialState = {
@@ -11,18 +11,21 @@ const initialState = {
 export default function inventory(state = initialState, action) {
 
 	switch (action.type) {
-		case ADD_CARDBOARD:
+		
+		case ADD_RESOURCE:
 		return {        
 			...state, 
-			cardboard: state.cardboard+= action.payload.count,
+			[action.payload.resource]: state[action.payload.resource]+= action.payload.count,
 
 		}
-		case ADD_TAPE:
+
+		case REMOVE_RESOURCE:
 		return {        
 			...state, 
-			tape: state.tape+= action.payload.count,
-			
+			[action.payload.resource]: state[action.payload.resource]-= action.payload.count,
+
 		}
+		
 		default:
 		return state
 	}
