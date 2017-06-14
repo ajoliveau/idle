@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import * as styles from './style';
 
 // Button that consumes resources when clicked
 // TODO : Add modal window or highlight missing resources on click if not enough ?
@@ -14,23 +15,10 @@ class ButtonResource extends Component {
 
 	render() {
 
-		const buttonStyle = {
-			position: 'relative',
-			"textAlign": 'center',
-			border: '1px solid black',			
-			height: '15px',
-			"marginBottom": '20px',
-			"marginTop": '5px',
-			padding: '5px 10px',
-			cursor: 'pointer',
-			userSelect: 'none',
-			display: 'inline-block'
-		};
-
 		const { text } = this.props
 
 		return (
-			<div className="button_resource" onClick={this.buttonClicked} style={buttonStyle} >
+			<div className="button_resource" onClick={this.buttonClicked} style={styles.buttonStyle} >
 				{text}				
 			</div>
 		)

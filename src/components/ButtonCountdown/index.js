@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import * as styles from './style';
 
 // Button that disables himself when clicked and displays a progression bar that fills up until it's ready to
 // be clicked again
@@ -23,42 +24,13 @@ class ButtonCountdown extends Component {
 
 	render() {
 
-		const buttonStyle = {
-			position: 'relative',
-			"textAlign": 'center',
-			border: '1px solid black',			
-			height: '15px',
-			"marginBottom": '20px',
-			"marginTop": '5px',
-			padding: '5px 10px',
-			cursor: 'pointer',
-			userSelect: 'none',
-			display: 'inline-block'
-		};
-
-		if (this.state.onCooldown) {
-			buttonStyle.cursor = 'default';
-			buttonStyle.borderColor = '#b2b2b2';
-			buttonStyle.color = '#b2b2b2';			
-		}		
-
-		const cooldownStyle = {
-			'position': 'absolute',
-			'top': '0px',
-			'left': '0px',
-			'zIndex': '-1',
-			'height': '100%',
-			'backgroundColor': '#DDDDDD',
-		};
-
-
-
+		const buttonStyle = (this.state.onCooldown ? styles.buttonStyleCooldown : styles.buttonStyle);	
 		const { text } = this.props
 
 		return (
 			<div className="button_cooldown" onClick={this.buttonClicked} style={buttonStyle} >
 				{text}
-				<div className="cooldown" ref="cooldown" style={cooldownStyle}></div>
+				<div className="cooldown" ref="cooldown" style={styles.cooldownStyle}></div>
 			</div>
 		)
 	}

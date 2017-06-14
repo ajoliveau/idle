@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types'
-import { launchRocket, nextRocket, previousRocket, nextPayload, previousPayload } from '../actions/rockets';
-import { addResource, removeResource } from '../actions/inventory';
-import ButtonCountdown from '../components/ButtonCountdown';
-import ButtonResource from '../components/ButtonResource';
+import { launchRocket, nextRocket, previousRocket, nextPayload, previousPayload } from '../../actions/rockets';
+import { addResource, removeResource } from '../../actions/inventory';
+import ButtonCountdown from '../ButtonCountdown';
+import ButtonResource from '../ButtonResource';
+import * as styles from './style';
 
 class MainSection extends Component {
 
@@ -23,6 +24,10 @@ class MainSection extends Component {
 		this.state = {
 			missingResources : []
 		};
+
+
+
+		console.log(styles.payloadCurrent);
 	}
 
 	componentDidMount () {
@@ -32,78 +37,49 @@ class MainSection extends Component {
 	render() {
 		const { inventory, rockets } = this.props       
 		const currentRocket = rockets.current.rocket;
-		const currentPayload = rockets.current.payload;
-		console.log(currentRocket);
+		const currentPayload = rockets.current.payload;		
 		const state = this.state;	
-
-		const divStyle = {
-			width: "18%",
-			height: "100px",
-			float: "left",
-			margin: "1%",
-		}
-
-		const divRight = {
-			width: "28%",
-			height: "100px",
-			float: "left",
-			margin: "1%",
-		}
-
-		const divNextPrevious = {
-			display: 'inline',
-			cursor: 'pointer',
-			userSelect: 'none',
-		}
-
-		const divResourceRed = {
-			color: 'red',
-		}
-
-		const payloadCurrent = {
-			marginLeft: "30px",
-		}
 
 		return (
 			<section className="main" >								
-				<div className="resources" style={divStyle}>
+				<div className="resources" style={styles.divStyle}>
 					<div className="text">Cardboard : {inventory.cardboard} </div>
 					<ButtonCountdown text="Rummage in bins" onClick={this.cardboardClick} cooldown={20}/>
 					<div className="text">Tape : {inventory.tape} </div>
 					<ButtonCountdown text="Go to the hardware store" onClick={this.tapeClick} cooldown={40}/>														
 				</div>
-				<div className="middle" style={divRight}>					
+				<div className="middle" style={styles.divRight}>					
 					<h2>Rocket Builder</h2>
 					<div className="payload">
 						Payload :
-						<div className="payloadCurrent" style={payloadCurrent}>
+						<div className="payloadCurrent" style={styles.payloadCurrent}>
 							<div className="text">{currentPayload.name}</div>						
-							<div style={divNextPrevious} onClick={()=> this.previous("payload")}>⟵ Previous</div> <div style={divNextPrevious} onClick={()=> this.next("payload")}>Next ⟶</div>
+							<div style={styles.divNextPrevious} onClick={()=> this.previous("payload")}>⟵ Previous</div> <div style={styles.divNextPrevious} onClick={()=> this.next("payload")}>Next ⟶</div>
 						</div>
 					</div>
 					<div className="booster">
 						Booster :
-						<div className="boosterCurrent" style={payloadCurrent}>
+						<div className="boosterCurrent" style={styles.payloadCurrent}>
 							<div className="text">{currentRocket.name}</div>
 							{
 				                currentRocket.resources.map(function(resource)  {	
 				                	
-				                	const style = (state.missingResources.indexOf(resource) != -1) ? divResourceRed : {};
+				                	const style = (state.missingResources.indexOf(resource) != -1) ? styles.divResourceRed : {};
 				                	
 				                    return <div style={style} key={resource.name}>{resource.name} : {inventory[resource.shortName]}/{resource.count}</div>
 				                })
 							}
-							<div style={divNextPrevious} onClick={() => this.previous("rocket")}>⟵ Previous</div> <div style={divNextPrevious} onClick={()=> this.next("rocket")}>Next ⟶</div>
+							<div style={styles.divNextPrevious} onClick={() => this.previous("rocket")}>⟵ Previous</div> <div style={styles.divNextPrevious} onClick={()=> this.next("rocket")}>Next ⟶</div>
 						</div>
 					</div>
 
 				</div>
-				<div className="right" style={divStyle}>					
+				<div className="right" style={styles.divStyle}>					
 					<div className="text">Rockets launched : {rockets.totalLaunches} </div>
 					<ButtonResource text="Launch !" highlight={this.highlightResource} inventory={inventory} rocket={currentRocket} onClick={this.launchClick} />
 				</div>				
 				
-				<div className="right" style={divRight}>					
+				<div className="right" style={styles.divRight}>					
 					<img ref="img" src={currentRocket.image}></img>
 				</div>
 			</section>
