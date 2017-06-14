@@ -2,6 +2,8 @@
 export const SWITCH_ROCKET = 'SWITCH_ROCKET';
 export const NEXT_ROCKET = 'NEXT_ROCKET';
 export const PREVIOUS_ROCKET = 'PREVIOUS_ROCKET';
+export const NEXT_PAYLOAD = 'NEXT_PAYLOAD';
+export const PREVIOUS_PAYLOAD = 'PREVIOUS_PAYLOAD';
 export const LAUNCH_ROCKET = 'LAUNCH_ROCKET';
 
 // -- A C T I O N S
@@ -25,6 +27,18 @@ export const nextRocket = ( rocket ) => {
 export const previousRocket = ( rocket ) => {
     return {
         type: PREVIOUS_ROCKET,
+    };
+};
+
+export const nextPayload = ( payload ) => {
+    return {
+        type: NEXT_PAYLOAD,
+    };
+};
+
+export const previousPayload = ( payload ) => {
+    return {
+        type: previousPayload,
     };
 };
 

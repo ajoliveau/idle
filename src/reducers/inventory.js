@@ -5,7 +5,8 @@ import {
 
 const initialState = {
 	cardboard: 0,
-	tape: 0
+	tape: 0,
+	budget: 0
 }
 
 export default function inventory(state = initialState, action) {

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+// Button that disables himself when clicked and displays a progression bar that fills up until it's ready to
+// be clicked again
+
 class ButtonCountdown extends Component {	
 
 	constructor ( props ) {

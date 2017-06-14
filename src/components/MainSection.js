@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types'
-import { launchRocket, nextRocket, previousRocket } from '../actions/rockets';
+import { launchRocket, nextRocket, previousRocket, nextPayload, previousPayload } from '../actions/rockets';
 import { addResource, removeResource } from '../actions/inventory';
 import ButtonCountdown from '../components/ButtonCountdown';
 import ButtonResource from '../components/ButtonResource';
@@ -31,19 +31,20 @@ class MainSection extends Component {
 	
 	render() {
 		const { inventory, rockets } = this.props       
-		const currentRocket = rockets.current;
+		const currentRocket = rockets.current.rocket;
+		const currentPayload = rockets.current.payload;
+		console.log(currentRocket);
 		const state = this.state;	
-		console.log(state.missingResources);
 
 		const divStyle = {
-			width: "20%",
+			width: "18%",
 			height: "100px",
 			float: "left",
 			margin: "1%",
 		}
 
 		const divRight = {
-			width: "40%",
+			width: "28%",
 			height: "100px",
 			float: "left",
 			margin: "1%",
@@ -59,6 +60,10 @@ class MainSection extends Component {
 			color: 'red',
 		}
 
+		const payloadCurrent = {
+			marginLeft: "30px",
+		}
+
 		return (
 			<section className="main" >								
 				<div className="resources" style={divStyle}>
@@ -67,21 +72,37 @@ class MainSection extends Component {
 					<div className="text">Tape : {inventory.tape} </div>
 					<ButtonCountdown text="Go to the hardware store" onClick={this.tapeClick} cooldown={40}/>														
 				</div>
-				<div className="middle" style={divStyle}>
-					<div className="text">Goal : {currentRocket.name}</div>
-					{
-		                currentRocket.resources.map(function(resource)  {	
-		                	
-		                	const style = (state.missingResources.indexOf(resource) != -1) ? divResourceRed : {};
-		                	
-		                    return <div style={style} key={resource.name}>{resource.name} : {inventory[resource.shortName]}/{resource.count}</div>
-		                })
-					}
-					<div style={divNextPrevious} onClick={this.previous}>⟵ Previous</div> <div style={divNextPrevious} onClick={this.next}>Next ⟶</div>
-					<br/><br/>
+				<div className="middle" style={divRight}>					
+					<h2>Rocket Builder</h2>
+					<div className="payload">
+						Payload :
+						<div className="payloadCurrent" style={payloadCurrent}>
+							<div className="text">{currentPayload.name}</div>						
+							<div style={divNextPrevious} onClick={()=> this.previous("payload")}>⟵ Previous</div> <div style={divNextPrevious} onClick={()=> this.next("payload")}>Next ⟶</div>
+						</div>
+					</div>
+					<div className="booster">
+						Booster :
+						<div className="boosterCurrent" style={payloadCurrent}>
+							<div className="text">{currentRocket.name}</div>
+							{
+				                currentRocket.resources.map(function(resource)  {	
+				                	
+				                	const style = (state.missingResources.indexOf(resource) != -1) ? divResourceRed : {};
+				                	
+				                    return <div style={style} key={resource.name}>{resource.name} : {inventory[resource.shortName]}/{resource.count}</div>
+				                })
+							}
+							<div style={divNextPrevious} onClick={() => this.previous("rocket")}>⟵ Previous</div> <div style={divNextPrevious} onClick={()=> this.next("rocket")}>Next ⟶</div>
+						</div>
+					</div>
+
+				</div>
+				<div className="right" style={divStyle}>					
 					<div className="text">Rockets launched : {rockets.totalLaunches} </div>
 					<ButtonResource text="Launch !" highlight={this.highlightResource} inventory={inventory} rocket={currentRocket} onClick={this.launchClick} />
-				</div>
+				</div>				
+				
 				<div className="right" style={divRight}>					
 					<img ref="img" src={currentRocket.image}></img>
 				</div>
@@ -89,12 +110,18 @@ class MainSection extends Component {
 		)
 	}
 
-	next () {
-		this.props.dispatch(nextRocket());
+	next (type) {
+		if (type === "rocket")
+			this.props.dispatch(nextRocket());
+		else
+			this.props.dispatch(nextPayload());
 	}
 
-	previous () {
-		this.props.dispatch(previousRocket());
+	previous (type) {
+		if (type === "rocket")
+			this.props.dispatch(previousRocket());
+		else
+			this.props.dispatch(previousPayload());
 	}
 
 	tapeClick () {
@@ -116,7 +143,7 @@ class MainSection extends Component {
 
 		this.timeoutLaunch = setTimeout(function(){ 
 			img.style.visibility = "hidden";
-		}, this.props.rockets.current.imageDuration);
+		}, this.props.rockets.current.rocket.imageDuration);
 
 
 		this.props.dispatch(launchRocket());
