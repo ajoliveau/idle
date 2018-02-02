@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types'
+//import PropTypes from 'prop-types';
 import { launchRocket, nextRocket, previousRocket, nextPayload, previousPayload } from '../../actions/rockets';
+import { nextMission, previousMission, nextTarget, previousTarget } from '../../actions/missions';
 import { addResource, removeResource } from '../../actions/inventory';
 import ButtonCountdown from '../ButtonCountdown';
 import ButtonResource from '../ButtonResource';
@@ -35,9 +36,11 @@ class MainSection extends Component {
 	}
 	
 	render() {
-		const { inventory, rockets } = this.props       
+		const { inventory, rockets, missions } = this.props       
 		const currentRocket = rockets.current.rocket;
 		const currentPayload = rockets.current.payload;		
+        const currentMission = missions.current.mission;     
+        const currentTarget = missions.current.target;     
 		const state = this.state;	
 
 		return (
@@ -48,7 +51,7 @@ class MainSection extends Component {
 					<div className="text">Tape : {inventory.tape} </div>
 					<ButtonCountdown text="Go to the hardware store" onClick={this.tapeClick} cooldown={40}/>														
 				</div>
-				<div className="middle" style={styles.divRight}>					
+				<div className="middle" style={styles.divRight}>			
 					<h2>Rocket Builder</h2>
 					<div className="payload">
 						Payload :
@@ -64,7 +67,7 @@ class MainSection extends Component {
 							{
 				                currentRocket.resources.map(function(resource)  {	
 				                	
-				                	const style = (state.missingResources.indexOf(resource) != -1) ? styles.divResourceRed : {};
+				                	const style = (state.missingResources.indexOf(resource) !== -1) ? styles.divResourceRed : {};
 				                	
 				                    return <div style={style} key={resource.name}>{resource.name} : {inventory[resource.shortName]}/{resource.count}</div>
 				                })
@@ -72,6 +75,60 @@ class MainSection extends Component {
 							<div style={styles.divNextPrevious} onClick={() => this.previous("rocket")}>⟵ Previous</div> <div style={styles.divNextPrevious} onClick={()=> this.next("rocket")}>Next ⟶</div>
 						</div>
 					</div>
+					<div className="mission">
+						Mission : 
+						<div className="missionCurrent" style={styles.payloadCurrent}>
+						     <div className="text">{currentMission.name}</div>                       
+                             <div style={styles.divNextPrevious} onClick={()=> this.previous("mission")}>⟵ Previous</div> <div style={styles.divNextPrevious} onClick={()=> this.next("mission")}>Next ⟶</div>							
+						</div>
+					</div>
+                    <div className="target">
+                        Target : 
+                        <div className="targetCurrent" style={styles.payloadCurrent}>
+                             <div className="text">{currentTarget.name}</div>                       
+                             <div style={styles.divNextPrevious} onClick={()=> this.previous("target")}>⟵ Previous</div> <div style={styles.divNextPrevious} onClick={()=> this.next("target")}>Next ⟶</div>                          
+                        </div>
+                    </div>
+
+				</div>
+				<div className="middle" style={styles.divRight}>			
+					<h2>Mission Planner</h2>
+					<div className="payload">
+						Payload :
+						<div className="payloadCurrent" style={styles.payloadCurrent}>
+							<div className="text">{currentPayload.name}</div>						
+							<div style={styles.divNextPrevious} onClick={()=> this.previous("payload")}>⟵ Previous</div> <div style={styles.divNextPrevious} onClick={()=> this.next("payload")}>Next ⟶</div>
+						</div>
+					</div>
+					<div className="booster">
+						Booster :
+						<div className="boosterCurrent" style={styles.payloadCurrent}>
+							<div className="text">{currentRocket.name}</div>
+							{
+				                currentRocket.resources.map(function(resource)  {	
+				                	
+				                	const style = (state.missingResources.indexOf(resource) !== -1) ? styles.divResourceRed : {};
+				                	
+				                    return <div style={style} key={resource.name}>{resource.name} : {inventory[resource.shortName]}/{resource.count}</div>
+				                })
+							}
+							<div style={styles.divNextPrevious} onClick={() => this.previous("rocket")}>⟵ Previous</div> <div style={styles.divNextPrevious} onClick={()=> this.next("rocket")}>Next ⟶</div>
+						</div>
+					</div>
+					<div className="mission">
+						Mission : 
+						<div className="missionCurrent" style={styles.payloadCurrent}>
+						     <div className="text">{currentMission.name}</div>                       
+                             <div style={styles.divNextPrevious} onClick={()=> this.previous("mission")}>⟵ Previous</div> <div style={styles.divNextPrevious} onClick={()=> this.next("mission")}>Next ⟶</div>							
+						</div>
+					</div>
+                    <div className="target">
+                        Target : 
+                        <div className="targetCurrent" style={styles.payloadCurrent}>
+                             <div className="text">{currentTarget.name}</div>                       
+                             <div style={styles.divNextPrevious} onClick={()=> this.previous("target")}>⟵ Previous</div> <div style={styles.divNextPrevious} onClick={()=> this.next("target")}>Next ⟶</div>                          
+                        </div>
+                    </div>
 
 				</div>
 				<div className="right" style={styles.divStyle}>					
@@ -80,7 +137,7 @@ class MainSection extends Component {
 				</div>				
 				
 				<div className="right" style={styles.divRight}>					
-					<img ref="img" src={currentRocket.image}></img>
+					<img ref="img" alt="" src={currentRocket.image}></img>
 				</div>
 			</section>
 		)
@@ -89,6 +146,10 @@ class MainSection extends Component {
 	next (type) {
 		if (type === "rocket")
 			this.props.dispatch(nextRocket());
+        else if (type === "mission")
+            this.props.dispatch(nextMission());
+        else if (type === "target")
+            this.props.dispatch(nextTarget());
 		else
 			this.props.dispatch(nextPayload());
 	}
@@ -96,6 +157,10 @@ class MainSection extends Component {
 	previous (type) {
 		if (type === "rocket")
 			this.props.dispatch(previousRocket());
+        else if (type === "mission")
+            this.props.dispatch(previousMission());
+        else if (type === "target")
+            this.props.dispatch(previousTarget());
 		else
 			this.props.dispatch(previousPayload());
 	}

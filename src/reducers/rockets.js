@@ -16,12 +16,12 @@ const initialState = {
 		},
 		{
 			id: 1,
-			name: "Thermomether",
+			name: "Altimeter",
 		},
 		{
 			id: 2,
-			name: "Altimeter",
-		},
+			name: "Thermomether",
+		},		
 		{
 			id: 3,
 			name: "Video camera",
